@@ -5,6 +5,7 @@
   "main": "server.ts",
   "license": "MIT",
   "scripts": {
+    "db:seed": "ts-node src/database/dbSeed.ts",
     "dev": "ts-node-dev --respawn --transpile-only --watch src src/server.ts",
     "compile": "npx tsc",
     "start": "node ./dist/server.js"
@@ -13,7 +14,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "express-async-errors": "^3.1.1"
+    "express-async-errors": "^3.1.1",
+    "mysql2": "^3.11.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
