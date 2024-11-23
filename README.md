@@ -1,9 +1,11 @@
-> # Projeto Taxi APP - Desafio técnico Shopper
+# Projeto Taxi APP - Desafio Técnico Shopper
 
-> Descrição:
-Desenvolver uma aplicação conceito onde o usuário poderá
-solicitar uma viagem em carro particular de um ponto A até um ponto
-B. Ele poderá escolher entre algumas opções de motoristas e valores e
-confirmar a viagem. Depois também poderá listar o histórico das
-viagens realizadas:
+## Descrição
+
+O objetivo deste projeto é desenvolver uma aplicação conceito que permite ao usuário:
+
+- Solicitar uma viagem de carro particular entre dois pontos: ponto A e ponto B.
+- Escolher entre diferentes opções de motoristas e valores.
+- Confirmar a solicitação da viagem.
+- Consultar o histórico de viagens realizadas.
 
