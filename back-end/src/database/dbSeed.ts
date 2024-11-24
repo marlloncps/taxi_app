@@ -65,30 +65,13 @@ const executeSqlCommands = async (
   }
 };
 
-const closeConnection = (connection: mysql.Connection): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    connection.end((err) => {
-      if (err) {
-        reject("Erro ao fechar a conexão: " + err.message);
-      } else {
-        resolve();
-      }
-    });
-  });
-};
-
 const runSeeder = async () => {
   try {
     console.log("Conectado ao banco de dados MySQL!");
 
     await executeSqlCommands(connection);
-
-    await closeConnection(connection);
-    console.log("Conexão encerrada.");
-    process.exit(0);
   } catch (error) {
-    console.error(error);
-    process.exit(1);
+    throw error;
   }
 };
 
