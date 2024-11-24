@@ -56,10 +56,7 @@ const runSeeder = async () => {
     await executeSqlCommands(connection);
   } catch (error) {
     console.error("Erro ao rodar o seeder:", error);
-  } finally {
-    await connection.end(); // Fechar a conexão ao finalizar
-    console.log("Conexão com o banco de dados encerrada.");
-  }
+  } 
 };
 
 runSeeder();
