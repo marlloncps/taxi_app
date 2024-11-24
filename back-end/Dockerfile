@@ -1,4 +1,4 @@
-FROM node:18 AS build
+FROM node:18
 
 WORKDIR /app
 
@@ -7,14 +7,6 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
-
-FROM node:18 AS production
-
-WORKDIR /app
-
-COPY --from=build /app /app
-
-RUN yarn install
 
 EXPOSE 8080
 
