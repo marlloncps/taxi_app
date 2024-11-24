@@ -1,9 +1,7 @@
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 import connection from "./db";
 
-const executeSqlCommands = async (
-  connection: mysql.Connection
-): Promise<void> => {
+const executeSqlCommands = async (connection: mysql.Pool): Promise<void> => {
   const sqlCommands = [
     `CREATE DATABASE IF NOT EXISTS taxi_app;`,
     `USE taxi_app;`,
@@ -42,24 +40,10 @@ const executeSqlCommands = async (
 
   for (let i = 0; i < sqlCommands.length; i++) {
     try {
-      await new Promise<void>((resolve, reject) => {
-        connection.query(sqlCommands[i], (error, results) => {
-          if (error) {
-            console.error(
-              `Erro ao executar o comando SQL número ${i + 1}:`,
-              error
-            );
-            reject(error);
-          } else {
-            console.log(
-              `Comando SQL número ${i + 1} executado com sucesso`,
-              results
-            );
-            resolve();
-          }
-        });
-      });
+      await connection.query(sqlCommands[i]);
+      console.log(`Comando SQL número ${i + 1} executado com sucesso`);
     } catch (error) {
+      console.error(`Erro ao executar o comando SQL número ${i + 1}:`, error);
       throw new Error(`Erro ao executar o comando ${i + 1}: ${error}`);
     }
   }
@@ -71,7 +55,10 @@ const runSeeder = async () => {
 
     await executeSqlCommands(connection);
   } catch (error) {
-    throw error;
+    console.error("Erro ao rodar o seeder:", error);
+  } finally {
+    await connection.end(); // Fechar a conexão ao finalizar
+    console.log("Conexão com o banco de dados encerrada.");
   }
 };
 
