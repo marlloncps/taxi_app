@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST || "localhost",
+  host: process.env.MYSQL_HOST || "mysql",
   user: process.env.MYSQL_user || "root",
   password: process.env.MYSQL_PASSWORD || "root",
   database: process.env.MYSQL_DATABASE || "taxi_app",
