@@ -23,11 +23,8 @@ class RideConfirmModel {
     const query =
       "INSERT INTO rides (customer_id, origin, destination, distance, duration, driver, value) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    const connectionInstance = await connection.getConnection();
     try {
-      await connectionInstance.beginTransaction();
-
-      const [rows] = await connectionInstance.query(query, [
+      const [rows] = await connection.query(query, [
         customer_id,
         origin,
         destination,
@@ -37,14 +34,10 @@ class RideConfirmModel {
         value,
       ]);
 
-      await connectionInstance.commit();
       return rows;
     } catch (error) {
-      await connectionInstance.rollback();
       console.error("Erro ao confirmar viagem:", error);
       throw new Error("Erro ao salvar viagem no banco de dados.");
-    } finally {
-      connectionInstance.release();
     }
   }
 }

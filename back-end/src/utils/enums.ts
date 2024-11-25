@@ -12,5 +12,7 @@ export enum ErrosCodeResponseEnum {
   DriverNotFound = "DRIVER_NOT_FOUND",
   InvalidDistance = "INVALID_DISTANCE",
   RouteNotFound = "NOT_FOUND_ROUTES",
-  InternalServerError = "INTERNAL_SERVER_ERROR"
+  InternalServerError = "INTERNAL_SERVER_ERROR",
+  InvalidDriver = "INVALID_DRIVER",
+  RidesNotFound = "NO_RIDES_FOUND"
 }
