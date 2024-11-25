@@ -4,6 +4,21 @@ import rideConfirmVerifyParams from "../../utils/ride-confirm-verify";
 import { ErrosCodeResponseEnum } from "../../utils/enums";
 
 class RideConfirmController {
+  constructor() {
+    this.confirmRide = this.confirmRide.bind(this);
+    this.sendErrorResponse = this.sendErrorResponse.bind(this);
+  }
+  private sendErrorResponse(
+    res: Response,
+    status: number,
+    errorCode: ErrosCodeResponseEnum,
+    errorDescription: string
+  ) {
+    return res.status(status).send({
+      error_code: errorCode,
+      error_description: errorDescription,
+    });
+  }
   async confirmRide(req: Request, res: Response) {
     const {
       customer_id,
@@ -25,39 +40,52 @@ class RideConfirmController {
         driver,
         value,
       });
-    const { status, message } = await rideConfirmService.confirmRide({
-      customer_id,
-      origin,
-      destination,
-      distance,
-      duration,
-      driver,
-      value,
-    });
-    console.log(status);
+
     if (verifyStatus === 400) {
-      res
-        .status(verifyStatus)
-        .send({ error_code: ErrosCodeResponseEnum.InvalidData, error_description: verifyMessage });
-      return;
+      return this.sendErrorResponse(
+        res,
+        verifyStatus,
+        ErrosCodeResponseEnum.InvalidData,
+        verifyMessage ?? ""
+      );
     }
 
-    if (status === 404) {
-      res
-        .status(status)
-        .send({ error_code: ErrosCodeResponseEnum.DriverNotFound, error_description: message });
-      return;
-    }
+    try {
+      const { status, message } = await rideConfirmService.confirmRide({
+        customer_id,
+        origin,
+        destination,
+        distance,
+        duration,
+        driver,
+        value,
+      });
 
-    if (status === 406) {
-      res
-        .status(status)
-        .send({ error_code: ErrosCodeResponseEnum.InvalidDistance, error_description: message });
-      return;
-    }
+      if (status !== 200) {
+        const errorMap = {
+          404: ErrosCodeResponseEnum.DriverNotFound,
+          406: ErrosCodeResponseEnum.InvalidDistance,
+        } as const;
 
-    res.status(200).send({ success: true });
-    return;
+        return this.sendErrorResponse(
+          res,
+          status,
+          errorMap[status as keyof typeof errorMap],
+          message
+        );
+      }
+
+      return res.status(200).send({ success: true });
+    } catch (error) {
+      console.error("Erro ao confirmar viagem:", error);
+      return this.sendErrorResponse(
+        res,
+        500,
+        ErrosCodeResponseEnum.InternalServerError,
+        "Erro interno ao processar a solicitação."
+      );
+    }
   }
 }
+
 export default new RideConfirmController();

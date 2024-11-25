@@ -1,4 +1,5 @@
 import driversService from "../drivers/drivers-service";
+import rideConfirmModel from "./ride-confirm.model";
 
 export interface ConfirmRideProps {
   customer_id: string;
@@ -24,8 +25,13 @@ class RideConfirmService {
     value,
   }: ConfirmRideProps) {
     const driverResponse = await driversService.getDriverById(driver.id);
-    if (!driverResponse)
-      return { status: 404, message: "Motorista não encontrado" };
+
+    if (!driverResponse) {
+      return {
+        status: 404,
+        message: "Motorista não encontrado",
+      };
+    }
 
     if (
       driverResponse.min_quilometers &&
@@ -33,10 +39,31 @@ class RideConfirmService {
     ) {
       return {
         status: 406,
-        message: "Quilometragem inválida para o motorista",
+        message: `Quilometragem mínima para este motorista é de ${driverResponse.min_quilometers} km.`,
       };
     }
-    return { status: 200, message: "Viagem confirmada com sucesso" };
+
+    try {
+      const rideObject = {
+        customer_id,
+        origin,
+        destination,
+        distance,
+        duration,
+        driver: JSON.stringify(driver),
+        value,
+      };
+
+      await rideConfirmModel.persistRide(rideObject);
+
+      return {
+        status: 200,
+        message: "Viagem confirmada com sucesso.",
+      };
+    } catch (error) {
+      console.error("Erro ao confirmar viagem:", error);
+      throw new Error("Erro interno ao confirmar viagem.");
+    }
   }
 }
 
