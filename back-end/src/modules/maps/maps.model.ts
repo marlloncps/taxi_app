@@ -26,7 +26,7 @@ class MapsModel {
 
     const response = await axios.post(this.googleApiPath, bodyGetRoute, {
       headers: {
-        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration",
+        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.legs.startLocation,routes.legs.endLocation,routes.legs.localizedValues",
       },
     });
     return response;

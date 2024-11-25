@@ -33,6 +33,7 @@ class RideEstimateController {
       }
 
       const route = RoutesData.routes[0];
+      const { startLocation, endLocation, localizedValues } = route.legs[0];
 
       if (!route.distanceMeters) {
         res.status(500).send({
@@ -46,9 +47,18 @@ class RideEstimateController {
       const drivers = await driversService.getDriversByDistance(+distance);
 
       res.status(200).send({
-        message: "Estimativa calculada com sucesso",
-        route,
-        drivers,
+        origin: {
+          latitude: startLocation.latLng.latitude,
+          longitude: startLocation.latLng.longitude,
+        },
+        destination: {
+          latitude: endLocation.latLng.latitude,
+          longitude: endLocation.latLng.longitude,
+        },
+        distance: +distance,
+        duration: localizedValues.staticDuration.text,
+        options: drivers,
+        routeResponse: route,
       });
     } catch (error) {
       console.error("Erro ao calcular estimativa de rota:", error);

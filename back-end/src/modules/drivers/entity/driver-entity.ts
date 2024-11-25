@@ -3,7 +3,10 @@ export default interface Driver {
   name: string;
   description: string;
   vehicle: string;
-  rating: string;
-  fee: number;
-  minQuilometers: number;
+  review: {
+    rating: number;
+    comment: string;
+  };
+  value: number;
+  min_quilometers?: number;
 }

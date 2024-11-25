@@ -3,7 +3,12 @@ import driversModel from "../drivers/drivers-model";
 class DriversService {
   async getDriversByDistance(distance: number) {
     const response = await driversModel.getDriversByDistance(distance);
-    return response
+
+    response.forEach((driver) => {
+      delete driver.min_quilometers;
+    });
+
+    return response;
   }
 }
 
