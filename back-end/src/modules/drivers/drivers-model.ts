@@ -12,6 +12,24 @@ class DriversModel {
       throw new Error("Erro ao buscar motoristas no banco de dados.");
     }
   }
+
+  async getDriverById(id: number): Promise<Driver | null> {
+    const query = "SELECT * FROM drivers WHERE ID = ?";
+    try {
+      const [rows] = await connection.query(query, [id]);
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        return null;
+      }
+
+      const driver = rows[0];
+
+      return driver as Driver;
+    } catch (error) {
+      console.error("Erro ao buscar motorista:", error);
+      throw new Error("Erro ao buscar motorista no banco de dados.");
+    }
+  }
 }
 
 export default new DriversModel();

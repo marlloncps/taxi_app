@@ -10,6 +10,11 @@ class DriversService {
 
     return response;
   }
+
+  async getDriverById(id: number) {
+    const response = await driversModel.getDriverById(id);
+    return response;
+  }
 }
 
 export default new DriversService();
