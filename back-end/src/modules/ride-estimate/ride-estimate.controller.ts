@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import driversService from "../drivers/drivers-service";
 import rideEstimateVerifyParams from "../../utils/ride-estimate-verify";
 import mapsModel from "../maps/maps.model";
+import { ErrosCodeResponseEnum } from "../../utils/enums";
 
 class RideEstimateController {
   async rideCalculate(req: Request, res: Response): Promise<void> {
@@ -16,7 +17,10 @@ class RideEstimateController {
     if (status === 400) {
       res
         .status(status)
-        .send({ error_code: "INVALID_DATA", error_description: message });
+        .send({
+          error_code: ErrosCodeResponseEnum.InvalidData,
+          error_description: message,
+        });
       return;
     }
 
@@ -28,7 +32,7 @@ class RideEstimateController {
 
       if (!RoutesData?.routes || +RoutesData.routes.length === 0) {
         res.status(404).send({
-          error_code: "NOT_FOUND_ROUTES",
+          error_code: ErrosCodeResponseEnum.RouteNotFound,
           error_description:
             "Não foi possível encontrar rotas disponíveis para essas localizações.",
         });
@@ -40,7 +44,7 @@ class RideEstimateController {
 
       if (!route.distanceMeters) {
         res.status(500).send({
-          error_code: "INTERNAL_SERVER_ERROR",
+          error_code: ErrosCodeResponseEnum.InternalServerError,
           error_description:
             "Erro ao calcular a distância da rota. Dados incompletos.",
         });
@@ -68,7 +72,7 @@ class RideEstimateController {
     } catch (error) {
       console.error("Erro ao calcular estimativa de rota:", error);
       res.status(500).send({
-        error_code: "INTERNAL_SERVER_ERROR",
+        error_code: ErrosCodeResponseEnum.InternalServerError,
         error_description:
           "Erro interno ao calcular estimativa de rota. Tente novamente mais tarde.",
       });
