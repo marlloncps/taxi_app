@@ -37,6 +37,18 @@ const executeSqlCommands = async (connection: mysql.Pool): Promise<void> => {
     10, 
     10)
     ;`,
+    `DROP TABLE IF EXISTS rides`,
+    `CREATE TABLE IF NOT EXISTS rides (
+    id INT NOT NULL AUTO_INCREMENT,
+    customer_id VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    origin TEXT NOT NULL,
+    destination TEXT NOT NULL,
+    distance INT NOT NULL DEFAULT 0,
+    duration TEXT NOT NULL,
+    driver JSON NOT NULL,
+    value DOUBLE NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
   ];
 
   for (let i = 0; i < sqlCommands.length; i++) {
