@@ -1,40 +1,34 @@
 import { Request, Response } from "express";
-import rideEstimateService from "./ride-estimate.service";
+import driversService from "../drivers/drivers-service";
+import rideEstimateVerifyParams from "../../utils/ride-estimate-verify";
+import mapsModel from "../maps/maps.model";
 
 class RideEstimateController {
   async rideCalculate(req: Request, res: Response): Promise<void> {
     const { origin, destination, customer_id } = req.body;
-    console.log(origin, destination, customer_id);
 
-    if (!origin || !destination || !customer_id) {
-      res.status(400).send({
-        message: "Endereço de origem, destino ou customer_id faltando",
-      });
+    const { status, message } = rideEstimateVerifyParams({
+      origin,
+      destination,
+      customer_id,
+    });
+
+    if (status === 400) {
+      res.status(status).send({ message });
       return;
     }
 
-    if (
-      typeof origin !== "string" ||
-      typeof destination !== "string" ||
-      typeof customer_id !== "string" ||
-      origin.trim() === "" ||
-      destination.trim() === "" ||
-      customer_id.trim() === ""
-    ) {
-      res.status(400).send({
-        message:
-          'O formato do corpo da requisição está inválido. O formato correto é: { "customer_id": "string", "origin": "string", "destination": "string" }',
-      });
-      return;
-    }
-
-    if (origin === destination) {
-      res.status(400).send({ message: "Os endereços não podem ser iguais!" });
-      return;
-    }
-    const drivers = await rideEstimateService.getDriversByDistance(5);
-    console.log(drivers);
-    res.status(200).send({ message: "Estimativa calculada com sucesso" });
+    const { data: RoutesData } = await mapsModel.getRoute({
+      origin,
+      destination,
+    });
+    const distance = (RoutesData.routes[0].distanceMeters / 1000).toFixed(2);
+    const drivers = await driversService.getDriversByDistance(+distance);
+    res.status(200).send({
+      message: "Estimativa calculada com sucesso",
+      route: RoutesData.routes[0],
+      drivers,
+    });
   }
 }
 

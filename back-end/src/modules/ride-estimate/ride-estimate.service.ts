@@ -1,10 +1,3 @@
-import rideEstimateModel from "./ride-estimate.model";
-
-class RideEstimateService {
-  async getDriversByDistance(distance: number) {
-    const response = await rideEstimateModel.getDriversByDistance(distance);
-    return response
-  }
-}
+class RideEstimateService {}
 
 export default new RideEstimateService();
