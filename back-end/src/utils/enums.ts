@@ -6,3 +6,11 @@ export enum GetRouteMapTravelModes {
   Motos = "TWO_WHEELER",
   Publico = "TRANSIT",
 }
+
+export enum ErrosCodeResponseEnum {
+  InvalidData = "INVALID_DATA",
+  DriverNotFound = "DRIVER_NOT_FOUND",
+  InvalidDistance = "INVALID_DISTANCE",
+  RouteNotFound = "NOT_FOUND_ROUTES",
+  InternalServerError = "INTERNAL_SERVER_ERROR"
+}
