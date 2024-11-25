@@ -3,7 +3,7 @@ import Driver from "./entity/driver-entity";
 
 class DriversModel {
   async getDriversByDistance(distance: number): Promise<Driver[]> {
-    const query = "SELECT * FROM drivers WHERE min_quilometers >= ?";
+    const query = "SELECT * FROM drivers WHERE ? >= min_quilometers";
     try {
       const [rows] = await connection.query(query, [distance]);
       return rows as Driver[];
