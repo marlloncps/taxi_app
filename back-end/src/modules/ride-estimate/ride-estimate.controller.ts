@@ -14,7 +14,9 @@ class RideEstimateController {
     });
 
     if (status === 400) {
-      res.status(status).send({ message });
+      res
+        .status(status)
+        .send({ error_code: "INVALID_DATA", error_description: message });
       return;
     }
 
@@ -26,7 +28,8 @@ class RideEstimateController {
 
       if (!RoutesData?.routes || +RoutesData.routes.length === 0) {
         res.status(404).send({
-          message:
+          error_code: "NOT_FOUND_ROUTES",
+          error_description:
             "Não foi possível encontrar rotas disponíveis para essas localizações.",
         });
         return;
@@ -37,7 +40,9 @@ class RideEstimateController {
 
       if (!route.distanceMeters) {
         res.status(500).send({
-          message: "Erro ao calcular a distância da rota. Dados incompletos.",
+          error_code: "INTERNAL_SERVER_ERROR",
+          error_description:
+            "Erro ao calcular a distância da rota. Dados incompletos.",
         });
         return;
       }
@@ -63,7 +68,8 @@ class RideEstimateController {
     } catch (error) {
       console.error("Erro ao calcular estimativa de rota:", error);
       res.status(500).send({
-        message:
+        error_code: "INTERNAL_SERVER_ERROR",
+        error_description:
           "Erro interno ao calcular estimativa de rota. Tente novamente mais tarde.",
       });
     }
