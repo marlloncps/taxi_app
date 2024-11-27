@@ -4,10 +4,9 @@ import {
   GoogleMap,
   Marker,
   useJsApiLoader,
-  DirectionsService,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { ridesAtom } from "../shared/atoms";
 
@@ -30,18 +29,33 @@ export default function GoogleMapComponent() {
 
   const [directions, setDirections] = useState<any>(null);
 
+  useEffect(() => {
+    if (!originLat || !originLng || !destinationLat || !destinationLng) {
+      return;
+    }
+
+    const directionsService = new google.maps.DirectionsService();
+
+    directionsService.route(
+      {
+        origin: { lat: originLat, lng: originLng },
+        destination: { lat: destinationLat, lng: destinationLng },
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (response, status) => {
+        if (status === "OK") {
+          setDirections(response);
+        } else {
+          console.error("Error fetching directions: ", status);
+        }
+      }
+    );
+  }, [originLat, originLng, destinationLat, destinationLng]); // Depend on origin and destination changes
+
   if (!isLoaded) return <div>Loading...</div>;
 
-  const handleDirectionsCallback = (response: any) => {
-    if (response.status === "OK") {
-      setDirections(response);
-    } else {
-      console.error("Error fetching directions: ", response);
-    }
-  };
-
   return (
-    <Box width={"1100px"} mt={2} height={"500px"}>
+    <Box width={"1100px"} mt={2} height={"400px"}>
       <GoogleMap
         mapContainerStyle={{
           width: "100%",
@@ -57,15 +71,6 @@ export default function GoogleMapComponent() {
       >
         <Marker position={{ lat: originLat, lng: originLng }} />
         <Marker position={{ lat: destinationLat, lng: destinationLng }} />
-
-        <DirectionsService
-          options={{
-            destination: { lat: destinationLat, lng: destinationLng },
-            origin: { lat: originLat, lng: originLng },
-            travelMode: google.maps.TravelMode.DRIVING,
-          }}
-          callback={handleDirectionsCallback}
-        />
 
         {directions && (
           <DirectionsRenderer

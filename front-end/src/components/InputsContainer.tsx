@@ -7,11 +7,7 @@ import { enqueueSnackbar } from "notistack";
 import { useRecoilState } from "recoil";
 import { ridesAtom } from "../shared/atoms";
 import { useNavigate } from "react-router-dom";
-
-interface ErrorResponse {
-  error_code?: string;
-  error_description?: string;
-}
+import { ErrorResponse } from "../shared/types";
 
 export default function InputsContainer() {
   const navigate = useNavigate();
@@ -40,15 +36,17 @@ export default function InputsContainer() {
           distance: data.distance,
           options: data.options,
           duration: data.duration,
+          originAddress: formValues.origin,
+          destinationAddress: formValues.destination,
+          customerId: formValues.customerId,
         }));
-        navigate('/ride')
-        console.log("Dados recebidos com sucesso:", data);
+        navigate("/ride");
       },
       onError: (error: AxiosError<ErrorResponse>) => {
         enqueueSnackbar(
-          `Erro ao calcular corrida: ${
+          `Erro: ${
             error.response?.data?.error_description || "Erro desconhecido"
-          }`,
+          } por favor tente novamente!`,
           { variant: "error" }
         );
       },

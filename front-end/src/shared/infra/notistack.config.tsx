@@ -11,6 +11,7 @@ export const snackbarProviderProps = {
   },
   style: {
     borderRadius: "10px",
+    fontFamily: "sans-serif",
   },
   action: (snackbarId: string) => (
     <IconButton
