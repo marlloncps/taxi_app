@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import driversService from "../drivers/drivers-service";
+import driversService from "../drivers/drivers.service";
 import rideEstimateVerifyParams from "../../utils/ride-estimate-verify";
 import mapsModel from "../maps/maps.model";
 import { ErrosCodeResponseEnum } from "../../utils/enums";

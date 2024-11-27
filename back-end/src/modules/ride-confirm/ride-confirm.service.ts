@@ -1,4 +1,4 @@
-import driversService from "../drivers/drivers-service";
+import driversService from "../drivers/drivers.service";
 import rideConfirmModel from "./ride-confirm.model";
 
 export interface ConfirmRideProps {

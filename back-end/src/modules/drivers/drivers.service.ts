@@ -1,4 +1,4 @@
-import driversModel from "../drivers/drivers-model";
+import driversModel from "./drivers.model";
 
 class DriversService {
   async getDriversByDistance(distance: number) {
@@ -13,6 +13,11 @@ class DriversService {
 
   async getDriverById(id: number) {
     const response = await driversModel.getDriverById(id);
+    return response;
+  }
+
+  async getAllDrivers() {
+    const response = await driversModel.getAllDrivers();
     return response;
   }
 }
