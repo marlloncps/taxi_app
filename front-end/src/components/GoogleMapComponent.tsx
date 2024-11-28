@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box } from "@mui/material";
 import {
   GoogleMap,
@@ -30,17 +29,23 @@ export default function GoogleMapComponent() {
   const [directions, setDirections] = useState<any>(null);
 
   useEffect(() => {
-    if (!originLat || !originLng || !destinationLat || !destinationLng) {
+    if (
+      !isLoaded ||
+      !originLat ||
+      !originLng ||
+      !destinationLat ||
+      !destinationLng
+    ) {
       return;
     }
 
-    const directionsService = new google.maps.DirectionsService();
+    const directionsService = new window.google.maps.DirectionsService();
 
     directionsService.route(
       {
         origin: { lat: originLat, lng: originLng },
         destination: { lat: destinationLat, lng: destinationLng },
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: window.google.maps.TravelMode.DRIVING,
       },
       (response, status) => {
         if (status === "OK") {
@@ -50,7 +55,7 @@ export default function GoogleMapComponent() {
         }
       }
     );
-  }, [originLat, originLng, destinationLat, destinationLng]); // Depend on origin and destination changes
+  }, [isLoaded, originLat, originLng, destinationLat, destinationLng]); // Depend on API load and coordinate changes
 
   if (!isLoaded) return <div>Loading...</div>;
 

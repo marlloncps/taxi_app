@@ -57,7 +57,7 @@ export default function DriverCardComponent({
           id: index,
           name: name,
         },
-        value: rideData.distance,
+        value: totalRideValue,
       });
       return response.data;
     },
@@ -81,7 +81,6 @@ export default function DriverCardComponent({
   );
 
   const handleSelectDriver = () => {
-    console.log(rideData);
     mutate();
   };
 

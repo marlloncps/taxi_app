@@ -1,16 +1,7 @@
 import { atom } from "recoil";
+import { Driver } from "./types";
 
-interface Driver {
-  id: number;
-  name: string;
-  description: string;
-  vehicle: string;
-  review: {
-    rating: number;
-    comment: string;
-  };
-  value: number;
-}
+
 
 interface RideProps {
   origin: {

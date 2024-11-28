@@ -62,7 +62,6 @@ export default function InputsContainer() {
   };
 
   const handleSearch = () => {
-    console.log("Valores do formulário:", formValues);
     mutate();
   };
 
